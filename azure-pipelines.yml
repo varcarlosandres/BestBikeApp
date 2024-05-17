@@ -19,9 +19,8 @@ variables:
     displayName: 'Install Dependencies'
 
   - script: | 
-      python manage.py migrate
-      python manage.py collectstatic --noinput
-    displayName: 'Django tasks'
+      python app.py
+    displayName: 'Run Flask Application'
 
   - task:  PublishBuildArtifacts@1
     inputs:
