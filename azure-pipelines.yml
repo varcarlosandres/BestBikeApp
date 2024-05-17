@@ -5,7 +5,7 @@ pool:
   vmImage: 'ubuntu-latest'
   
 variables:
-  azureSubscription: 'Azure subscription 1'
+  azureSubscription: 'carlosvp'
   appName: 'BestBikeApp'
 
 steps:
