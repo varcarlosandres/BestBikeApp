@@ -1,0 +1,38 @@
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest
+  
+variables:
+  azureSubscription: 'Azure subscription 1'
+  appName: 'BestBikeApp'
+
+  steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '3.x'
+
+  - script: |
+      python -m pip install --upgrade pip
+      pip install -r requirements.txt
+    displayName: 'Install Dependencies'
+
+  - script: | 
+      python manage.py migrate
+      python manage.py collectstatic --noinput
+    displayName: 'Django tasks'
+
+  - task:  PublishBuildArtifacts@1
+    inputs:
+      pathtoPublish: '$(Build.SourcesDirectory)'
+      artifactName: 'drop'
+
+  - task: AzureRmWebAppDeployment@4
+    displayName: 'Azure App Service Deploy'
+    inputs:
+      ConnectionType: 'AzureRM'
+      azureSubscription: $(azureSubscription)
+      appType: 'webApp'
+      WebAppName: $(appName)
+      packageForLinux: '$(Build.ArtifactStagingDirectory)/drop'
